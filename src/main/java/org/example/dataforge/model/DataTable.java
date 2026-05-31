@@ -43,4 +43,8 @@ public class DataTable {
 
         return list.toArray(new String[0]);
     }
+
+    public DataTable preview(int limit) {
+        return new DataTable(name, columns, rows.subList(0, Math.min(limit, rows.size())));
+    }
 }
