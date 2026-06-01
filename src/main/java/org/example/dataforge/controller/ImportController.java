@@ -21,6 +21,7 @@ import java.io.File;
 import java.io.IOException;
 
 import java.util.List;
+import java.util.Objects;
 
 public class ImportController {
     @FXML
@@ -43,7 +44,7 @@ public class ImportController {
         rootPane.setOnDragDropped(event -> {
             List<File> files = event.getDragboard().getFiles();
 
-            if (!files.isEmpty()) loadFile(files.get(0));
+            if (!files.isEmpty()) loadFile(files.getFirst());
         });
     }
 
@@ -64,6 +65,7 @@ public class ImportController {
 
             FXMLLoader loader = new FXMLLoader(getClass().getResource(pathTableView));
             Scene scene = new Scene(loader.load());
+            scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/org/example/dataforge/style.css")).toExternalForm());
             TableController controller = loader.getController();
             System.out.println(controller);
             controller.setTable(table);
@@ -71,6 +73,8 @@ public class ImportController {
             controller.renderTable(controller.getPreview());
 
             Stage stage = (Stage) browseButton.getScene().getWindow();
+            stage.setTitle(table.getName() + " (preview)");
+            stage.setResizable(true);
             stage.setScene(scene);
         } catch (FileErrorException | IOException e) {
             System.err.println(e.getMessage() + " " + e.getCause());

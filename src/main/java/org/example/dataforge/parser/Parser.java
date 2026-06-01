@@ -20,12 +20,12 @@ public abstract class Parser {
     public abstract DataTable parse();
 
     public DataTable parseDelimited(String delimiter) {
-        List<String> nameTable = new ArrayList<>();
+        List<String> nameTable;
         List<String[]> nameCell = new ArrayList<>();
 
         try (BufferedReader br = new BufferedReader(new FileReader(file))) {
             String line = br.readLine();
-            Arrays.asList(line.split(delimiter)).addAll(nameTable);
+            nameTable = new ArrayList<>(Arrays.asList(line.split(delimiter)));
 
             while ((line = br.readLine()) != null) {
                 nameCell.add(line.split(delimiter));

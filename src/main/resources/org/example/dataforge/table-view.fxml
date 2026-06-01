@@ -1,38 +1,54 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
-
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.dataforge.controller.TableController">
-    <bottom>
-        <HBox alignment="CENTER" prefHeight="48.0" prefWidth="600.0" spacing="10.0" BorderPane.alignment="CENTER">
-            <Button fx:id="confirmBtn" mnemonicParsing="false" prefHeight="25.0" prefWidth="92.0" text="Conferma">
-                <HBox.margin>
-                    <Insets />
-                </HBox.margin>
-            </Button>
-            <Button fx:id="cancelBtn" mnemonicParsing="false" prefHeight="25.0" prefWidth="92.0" text="Annulla">
-                <HBox.margin>
-                    <Insets />
-                </HBox.margin>
-            </Button>
-        </HBox>
-    </bottom>
+<?import javafx.scene.text.Font?>
+<BorderPane fx:id="borderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+            prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.12"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.dataforge.controller.TableController">
+    <top>
+        <VBox alignment="CENTER">
+            <MenuBar fx:id="menuBar" visible="false" managed="false">
+                <Menu text="File">
+                    <MenuItem text="Apri" onAction="#onOpen"/>
+                    <MenuItem text="Esporta" onAction="#onExport"/>
+                </Menu>
+                <Menu text="Modifica">
+                    <MenuItem text="Filtra" onAction="#onFilter"/>
+                    <MenuItem text="Ordina" onAction="#onSort"/>
+                    <MenuItem text="Rimuovi duplicati" onAction="#onDeduplicate"/>
+                    <MenuItem text="Rinomina colonna" onAction="#onRename"/>
+                </Menu>
+            </MenuBar>
+            <Label fx:id="previewLabel" text="PREVIEW" BorderPane.alignment="CENTER">
+                <font>
+                    <Font size="36.0"/>
+                </font>
+            </Label>
+        </VBox>
+    </top>
     <center>
         <TableView fx:id="tableView" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-            <columns>
-                <TableColumn prefWidth="75.0" text="C1" />
-                <TableColumn prefWidth="75.0" text="C2" />
-            </columns>
+            <columns/>
         </TableView>
     </center>
-   <top>
-      <Label text="PREVIEW" BorderPane.alignment="CENTER">
-         <font>
-            <Font size="36.0" />
-         </font>
-      </Label>
-   </top>
+    <bottom>
+        <HBox alignment="CENTER" prefHeight="48.0" prefWidth="600.0" spacing="10.0" BorderPane.alignment="CENTER">
+            <Button fx:id="confirmBtn" mnemonicParsing="false" onAction="#onClick" prefHeight="25.0" prefWidth="92.0"
+                    text="Conferma">
+                <HBox.margin>
+                    <Insets/>
+                </HBox.margin>
+            </Button>
+            <Button fx:id="cancelBtn" mnemonicParsing="false" onAction="#onClick" prefHeight="25.0" prefWidth="92.0"
+                    text="Annulla">
+                <HBox.margin>
+                    <Insets/>
+                </HBox.margin>
+            </Button>
+            <Button fx:id="transformBtn" managed="false" onAction="#onClick" text="Trasforma" visible="false"/>
+            <Button fx:id="exportBtn" managed="false" onAction="#onClick" text="Esporta" visible="false"/>
+        </HBox>
+    </bottom>
 </BorderPane>

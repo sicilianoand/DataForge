@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+      prefHeight="400.0" prefWidth="600.0" spacing="5.0" xmlns="http://javafx.com/javafx/17.0.12"
+      xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.dataforge.controller.ExportController">
+    <Label text="Formato"/>
+    <RadioButton text="CSV" fx:id="csvRadio"/>
+    <RadioButton text="JSON" fx:id="jsonRadio"/>
+    <RadioButton text="TXT" fx:id="txtRadio"/>
+    <Label fx:id="label" text="percorso"/>
+    <HBox alignment="CENTER">
+        <TextField promptText="Inserisci percorso..." fx:id="pathField"/>
+        <Button fx:id="browseButton" alignment="CENTER" text="sfoglio" onAction="#browse"/>
+    </HBox>
+    <Button onAction="#export" text="Esporta"/>
+</VBox>

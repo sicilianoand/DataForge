@@ -9,6 +9,7 @@ import java.io.IOException;
 
 public class CsvExporter extends DataExporter {
     private static final String PREFIX = "CsvExport_";
+    private static final String FORMAT = ".csv";
     private static final String DELIMITER = ",";
 
     public CsvExporter(DataTable table) {
@@ -18,7 +19,8 @@ public class CsvExporter extends DataExporter {
     @Override
     public void export(String pathname) {
         String finalPath = getFinalPath(pathname, PREFIX);
-
+        finalPath += FORMAT;
+        
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(finalPath))) {
             writeHeader(bw, DELIMITER);
             writeRows(bw, DELIMITER);

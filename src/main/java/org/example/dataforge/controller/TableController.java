@@ -3,24 +3,41 @@ package org.example.dataforge.controller;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
+import javafx.scene.layout.BorderPane;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import org.example.dataforge.model.DataTable;
 
+import java.io.IOException;
+import java.util.Objects;
+
 public class TableController {
+    @FXML
+    public BorderPane borderPane;
     private DataTable table;
     private DataTable preview;
-
     @FXML
     private Button confirmBtn;
-
     @FXML
     private Button cancelBtn;
+    @FXML
+    private Button transformBtn;
+    @FXML
+    private Button exportBtn;
+
+    @FXML
+    private Label previewLabel;
 
     @FXML
     private TableView<String[]> tableView;
+
+    @FXML
+    private MenuBar menuBar;
 
     public DataTable getTable() {
         return table;
@@ -40,6 +57,7 @@ public class TableController {
 
     public void renderTable(DataTable table) {
         tableView.getColumns().clear();
+        tableView.setColumnResizePolicy(TableView.UNCONSTRAINED_RESIZE_POLICY);
 
         for (int i = 0; i < table.getColumns().size(); i++) {
             final int colIndex = i;
@@ -50,5 +68,91 @@ public class TableController {
 
         ObservableList<String[]> rows = FXCollections.observableArrayList(table.getRows());
         tableView.setItems(rows);
+
+        tableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_ALL_COLUMNS);
+    }
+
+    @FXML
+    private void onClick(ActionEvent event) throws IOException {
+        if (event.getSource() == confirmBtn) {
+            renderTable(table);
+            borderPane.setTop(menuBar);
+            menuBar.setVisible(true);
+            menuBar.setManaged(true);
+
+            Stage stage = (Stage) confirmBtn.getScene().getWindow();
+            stage.setTitle(table.getName());
+        } else if (event.getSource() == cancelBtn) goToImport();
+    }
+
+    private void goToImport() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/dataforge/import-view.fxml"));
+            Scene scene = new Scene(loader.load(), 300, 250);
+            scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/org/example/dataforge/style.css")).toExternalForm());
+            Stage stage = (Stage) tableView.getScene().getWindow();
+            stage.setResizable(false);
+            stage.setTitle("Scegli un file!");
+            stage.setScene(scene);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @FXML
+    public void onOpen(ActionEvent event) {
+        goToImport();
+    }
+
+    @FXML
+    public void onExport(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/dataforge/export-view.fxml"));
+            Stage stage = new Stage();
+            stage.setScene(new Scene(loader.load()));
+            stage.setTitle("Esporta");
+            stage.setWidth(400);
+            stage.setHeight(300);
+            stage.setResizable(false);
+            stage.initModality(Modality.APPLICATION_MODAL);
+
+            ExportController controller = loader.getController();
+            controller.setTable(table);
+
+            stage.showAndWait();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @FXML
+    public void onFilter(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/dataforge/filter-view.xml"));
+            Stage stage = new Stage();
+            stage.setScene(new Scene(loader.load()));
+            stage.setTitle("Filtra");
+            stage.initModality(Modality.APPLICATION_MODAL);
+
+            FilterController controller = loader.getController();
+            controller.setTable(table);
+
+            stage.showAndWait();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @FXML
+    public void onSort(ActionEvent event) {
+    }
+
+    @FXML
+    public void onDeduplicate(ActionEvent event) {
+    }
+
+    @FXML
+    public void onRename(ActionEvent event) {
+
     }
 }

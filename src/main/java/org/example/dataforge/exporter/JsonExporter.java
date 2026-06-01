@@ -11,6 +11,7 @@ import java.util.List;
 
 public class JsonExporter extends DataExporter {
     private final static String PREFIX = "JsonExport_";
+    private final static String FORMAT = ".json";
 
     public JsonExporter(DataTable table) {
         super(table);
@@ -19,12 +20,14 @@ public class JsonExporter extends DataExporter {
     @Override
     public void export(String pathname) {
         String finalPath = getFinalPath(pathname, PREFIX);
+        finalPath += FORMAT;
         Gson gson = new Gson();
 
         List<String> columns = table.getColumns();
         List<String[]> rows = table.getRows();
 
         try (JsonWriter writer = gson.newJsonWriter(new FileWriter(finalPath))) {
+            writer.setIndent(" ");
             writer.beginArray();
             for (String[] row : rows) {
                 writer.beginObject();

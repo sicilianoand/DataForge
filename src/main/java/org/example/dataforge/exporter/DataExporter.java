@@ -18,14 +18,21 @@ public abstract class DataExporter {
 
     public abstract void export(String pathname);
 
-    public void writeHeader(BufferedWriter bw, String delimiter) throws IOException {
-        for (String col : table.getColumns()) bw.write(col + delimiter);
+    protected void writeHeader(BufferedWriter bw, String delimiter) throws IOException {
+        var columns = table.getColumns();
+        for (int i = 0; i < columns.size(); i++) {
+            bw.write(columns.get(i));
+            if (i < columns.size() - 1) bw.write(delimiter);
+        }
         bw.newLine();
     }
 
-    public void writeRows(BufferedWriter bw, String delimiter) throws IOException {
+    protected void writeRows(BufferedWriter bw, String delimiter) throws IOException {
         for (String[] row : table.getRows()) {
-            for (String data : row) bw.write(data + delimiter);
+            for (int i = 0; i < row.length; i++) {
+                bw.write(row[i]);
+                if (i < row.length - 1) bw.write(delimiter);
+            }
             bw.newLine();
         }
     }
@@ -35,7 +42,7 @@ public abstract class DataExporter {
 
         File dest = new File(pathname);
 
-        String today = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss"));
+        String today = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
         String fileName = prefix + table.getName() + "_" + today;
         String finalPath;
 
