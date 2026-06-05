@@ -39,6 +39,9 @@ public class TableController {
     @FXML
     private MenuBar menuBar;
 
+    @FXML
+    private Button removeFilterBtn;
+
     public DataTable getTable() {
         return table;
     }
@@ -73,15 +76,18 @@ public class TableController {
     }
 
     @FXML
-    private void onClick(ActionEvent event) throws IOException {
+    private void onClick(ActionEvent event) {
         if (event.getSource() == confirmBtn) {
             renderTable(table);
+
             borderPane.setTop(menuBar);
+
             menuBar.setVisible(true);
             menuBar.setManaged(true);
 
             Stage stage = (Stage) confirmBtn.getScene().getWindow();
             stage.setTitle(table.getName());
+            borderPane.setBottom(null);
         } else if (event.getSource() == cancelBtn) goToImport();
     }
 
@@ -100,12 +106,12 @@ public class TableController {
     }
 
     @FXML
-    public void onOpen(ActionEvent event) {
+    private void onOpen(ActionEvent event) {
         goToImport();
     }
 
     @FXML
-    public void onExport(ActionEvent event) {
+    private void onExport(ActionEvent event) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/dataforge/export-view.fxml"));
             Stage stage = new Stage();
@@ -117,7 +123,7 @@ public class TableController {
             stage.initModality(Modality.APPLICATION_MODAL);
 
             ExportController controller = loader.getController();
-            controller.setTable(table);
+            controller.setTable(this.table);
 
             stage.showAndWait();
         } catch (IOException e) {
@@ -126,33 +132,41 @@ public class TableController {
     }
 
     @FXML
-    public void onFilter(ActionEvent event) {
+    private void onFilter(ActionEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/dataforge/filter-view.xml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/dataforge/filter-view.fxml"));
             Stage stage = new Stage();
             stage.setScene(new Scene(loader.load()));
             stage.setTitle("Filtra");
             stage.initModality(Modality.APPLICATION_MODAL);
 
             FilterController controller = loader.getController();
-            controller.setTable(table);
+            controller.setTable(this.table);
+            controller.setOnResultTable(this::renderTable);
+            controller.setFilterBtn(this.removeFilterBtn);
 
             stage.showAndWait();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            e.fillInStackTrace();
         }
     }
 
     @FXML
-    public void onSort(ActionEvent event) {
+    private void onSort(ActionEvent event) {
     }
 
     @FXML
-    public void onDeduplicate(ActionEvent event) {
+    private void onDeduplicate(ActionEvent event) {
     }
 
     @FXML
-    public void onRename(ActionEvent event) {
+    private void onRename(ActionEvent event) {
 
+    }
+
+    public void onRemoveFilter(ActionEvent actionEvent) {
+        renderTable(this.table);
+        removeFilterBtn.setVisible(false);
+        removeFilterBtn.setManaged(false);
     }
 }

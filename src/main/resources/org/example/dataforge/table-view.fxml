@@ -47,8 +47,12 @@
                     <Insets/>
                 </HBox.margin>
             </Button>
-            <Button fx:id="transformBtn" managed="false" onAction="#onClick" text="Trasforma" visible="false"/>
-            <Button fx:id="exportBtn" managed="false" onAction="#onClick" text="Esporta" visible="false"/>
+            <Button fx:id="removeFilterBtn" mnemonicParsing="false" onAction="#onRemoveFilter" prefHeight="25.0"
+                    prefWidth="92.0" text="Rimuovi filtro" visible="false" managed="false">
+                <HBox.margin>
+                    <Insets/>
+                </HBox.margin>
+            </Button>
         </HBox>
     </bottom>
 </BorderPane>
